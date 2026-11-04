@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>前往最新版本</title>
+</head>
+<body style="font-family:sans-serif;padding:40px 16px;text-align:center">
+<p id="msg">正在前往最新版本…</p>
+<p><a href="../">若未自動跳轉，請點此回到版本總覽</a></p>
+<script>
+  fetch('../versions.json', { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      data.sort(function (x, y) { return y.date.localeCompare(x.date); });
+      if (data.length) { location.replace(data[0].url); }
+      else { document.getElementById('msg').textContent = '目前沒有版本。'; }
+    })
+    .catch(function () {
+      document.getElementById('msg').textContent = '無法取得版本清單。';
+    });
+</script>
+</body>
+</html>
