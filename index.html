@@ -61,11 +61,11 @@
       document.getElementById('latest').innerHTML =
         '<a class="latest" href="' + top.url + '">' +
         '<div class="tag">最新版本</div>' +
-        '<div class="name">' + top.note + '（' + top.date + '）</div>' +
+        '<div class="name">' + top.note + '（' + top.date + '發布）</div>' +
         '<div class="url">' + top.url + '</div></a>';
       list.innerHTML = data.map(function (v) {
         return '<li><a href="' + v.url + '"><span>' + v.note + '</span>' +
-               '<span class="date">' + v.date + '</span></a></li>';
+               '<span class="date">' + v.date + ' 發布</span></a></li>';
       }).join('');
     })
     .catch(function () {
