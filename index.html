@@ -40,6 +40,19 @@
   li a:hover { background: var(--accent-bg); }
   .date { color: var(--muted); white-space: nowrap; }
   .msg { color: var(--muted); padding: 14px 18px; }
+  .drafts-h { margin-top: 36px; }
+  .drafts-h small { color: var(--muted); font-weight: 400; font-size: .85rem; margin-left: 6px; }
+  .draft { padding: 14px 18px; }
+  .draft-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .draft-name { font-weight: 600; }
+  .draft-desc { color: var(--muted); font-size: .9rem; }
+  .btns { display: flex; gap: 8px; }
+  .btn { font: inherit; font-size: .85rem; padding: 4px 12px; border-radius: 6px; cursor: pointer;
+         border: 1px solid var(--line); background: var(--card); color: var(--text); text-decoration: none; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .preview { display: none; width: 100%; height: 560px; margin-top: 12px;
+             border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+  .preview.open { display: block; }
 </style>
 </head>
 <body>
@@ -49,6 +62,8 @@
   <div id="latest"></div>
   <h2>所有版本</h2>
   <ul id="list"><li class="msg">載入中…</li></ul>
+  <h2 class="drafts-h">其他版型<small>（開發中）</small></h2>
+  <ul id="drafts"><li class="msg">載入中…</li></ul>
 </main>
 <script>
   fetch('versions.json', { cache: 'no-store' })
@@ -72,5 +87,33 @@
       document.getElementById('list').innerHTML = '<li class="msg">版本清單載入失敗，請稍後重新整理。</li>';
     });
 </script>
+<script>
+  fetch('drafts.json', { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var box = document.getElementById('drafts');
+      if (!data.length) { box.innerHTML = '<li class="msg">目前沒有開發中的版型。</li>'; return; }
+      box.innerHTML = data.map(function (d, i) {
+        return '<li class="draft"><div class="draft-top"><div>' +
+          '<div class="draft-name">' + d.name + '</div>' +
+          (d.desc ? '<div class="draft-desc">' + d.desc + '</div>' : '') +
+          '</div><div class="btns">' +
+          '<button class="btn" type="button" data-i="' + i + '">預覽</button>' +
+          '<a class="btn" href="' + d.url + '" target="_blank" rel="noopener">開新視窗</a>' +
+          '</div></div><iframe class="preview" id="pv' + i + '" title="' + d.name + '" loading="lazy"></iframe></li>';
+      }).join('');
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-i]'); if (!b) return;
+        var f = document.getElementById('pv' + b.dataset.i);
+        if (!f.src) { f.src = data[b.dataset.i].url; }
+        f.classList.toggle('open');
+        b.textContent = f.classList.contains('open') ? '收合' : '預覽';
+      });
+    })
+    .catch(function () {
+      document.getElementById('drafts').innerHTML = '<li class="msg">版型清單載入失敗。</li>';
+    });
+</script>
 </body>
 </html>
+
