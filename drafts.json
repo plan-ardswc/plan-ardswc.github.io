@@ -1,5 +1,5 @@
 [
-  { "name": "A", "desc": "經典行政資訊系統", "url": "drafts/a/" },
-  { "name": "B", "desc": "政策分析工作台", "url": "drafts/b/" },
-  { "name": "C", "desc": "施政成果展示", "url": "drafts/c/" }
+  { "name": "V1", "url": "drafts/v1_original_plus.html" },
+  { "name": "V2", "url": "drafts/v2_policy_insights.html" },
+  { "name": "V3", "url": "drafts/v3_policy_showcase.html" }
 ]
